@@ -13,7 +13,7 @@ import simpy
 
 
 RANDOM_SEED = 42     # Not so random but we want it reproducible
-NUM_MACHINEs = 1     # Number of calc machines.
+NUM_MACHINES = 1     # Number of calc machines.
 NUM_SERVERS = 2      # Number of servers that are connected to sensors
 CALC_TIME = 5        # Time it takes to calculate 
 HEAVY_TIME = 10      # Time it takes for a heavy calculation
@@ -54,7 +54,7 @@ class Serverfarm(object):
         yield self.env.timeout(self.calctime)
 
 
-def device(env, name, server):
+def device(env, name, serverfarm):
     """The device process (each device has a ``name``) sends a request for data
     from (``server``).
 
@@ -62,11 +62,11 @@ def device(env, name, server):
 
     """
     print('%s sending request at %.2f.' % (name, env.now))
-    with server.machine.request() as request:
+    with serverfarm.server.request() as request:
         yield request
 
         print('%s gets processed at %.2f.' % (name, env.now))
-        yield env.process(server.calc(name))
+        yield env.process(serverfarm.proc(name))
 
         print('%s receives answer at %.2f.' % (name, env.now))
 
@@ -87,7 +87,7 @@ def setup(env, num_machines, num_servers, calctime, heavytime, t_inter):
     while True:
         yield env.timeout(random.randint(t_inter - 2, t_inter + 2))
         i += 1
-        env.process(device(env, 'Device %d' % i, serverfarm))
+        env.process(device(env, 'IOT %d' % i, serverfarm))
 
 # Setup and start the simulation
 print('IOT Network simulation')
