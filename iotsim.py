@@ -16,9 +16,9 @@ RANDOM_SEED = 42     # Not so random but we want it reproducible
 NUM_MACHINES = 1     # Number of calc machines.
 NUM_SERVERS = 2      # Number of servers that are connected to sensors
 CALC_TIME = 5        # Time it takes to calculate 
-HEAVY_TIME = 10      # Time it takes for a heavy calculation
-HEAVY_INTERVAL = 20  # How often a heavy calculation will be needed.
-SIM_TIME = 400       # Simulation time in minutes
+HEAVY_TIME = 15      # Time it takes for a heavy calculation
+HEAVY_INTERVAL = 30  # How often a heavy calculation will be needed.
+SIM_TIME = 400       # Simulation time in seconds
 
 class Datacenter(object):
     """A datacenter with limited number of rented machines.
@@ -51,7 +51,14 @@ class Serverfarm(object):
     def proc(self, val):
         """Processing the data incoming from a IOT device.
         """
-        yield self.env.timeout(self.calctime)
+
+        #Roughly 30% of all requests are heavy calculations.
+        if random.randint(0,1) < 0.3:
+            print("Process is heavy sending to data center!")
+            yield env.process(self.datacenter.calc(val))
+        else:
+            print("Process light, handle at server.")
+            yield self.env.timeout(self.calctime)
 
 
 def device(env, name, serverfarm):
