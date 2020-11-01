@@ -72,16 +72,13 @@ def device(env, name, serverfarm):
     """
     
     starttime = env.now
-    print('%s sending request at %.2f.' % (name, env.now))
     with serverfarm.server.request() as request:
         yield request
 
         getsprocessed = env.now
-        print('%s gets processed at %.2f.' % (name, env.now))
         yield env.process(serverfarm.proc(name))
 
         getsanswered = env.now
-        print('%s receives answer at %.2f.' % (name, env.now))
         wt = getsprocessed - starttime
         pt = getsanswered - getsprocessed
         tt = getsanswered - starttime
@@ -117,3 +114,6 @@ env.process(setup(env, NUM_MACHINES, NUM_SERVERS, CALC_TIME, HEAVY_TIME, HEAVY_I
 
 # Execute!
 env.run(until=SIM_TIME)
+
+for item in time_data:
+    print(item["totalTime"])
