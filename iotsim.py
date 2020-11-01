@@ -13,47 +13,51 @@ import simpy
 
 import matplotlib.pyplot as plt
 
+# All times unless otherwise specified are in seconds
 
-RANDOM_SEED = 42     # Not so random but we want it reproducible
-NUM_MACHINES = 1     # Number of calc machines.
-NUM_SERVERS = 2      # Number of servers that are connected to sensors
-CALC_TIME = 5        # Time it takes to calculate 
-HEAVY_TIME = 15      # Time it takes for a heavy calculation
-HEAVY_INTERVAL = 30  # How often a heavy calculation will be needed.
-SIM_TIME = 400       # Simulation time in seconds
+RANDOM_SEED = 42        # Not so random but we want it reproducible
+NUM_MACHINES = 1        # Number of calc machines.
+NUM_SERVERS = 1         # Number of gateway nodes that are connected to sensors
+NUM_DEVICES = 10        # Number of edge devices
+PROCESS_TIME = 1000        # Time it takes to calculate 
+COMPUTE_TIME = 1000        # Time it takes for a heavy calculation
+SEND_INTERVAL = 5000      # How often a edge device will send an image.
+SIM_TIME = 4000000          # Simulation time in seconds
 
-time_data = []
+time_data = []          # List of dictionaries to store the data of how long a request takes.
 
 class Datacenter(object):
-    """A datacenter with limited number of rented machines.
-
-    Servers can request one of the machines (1 default). When they get one
-    the calculation can start. It takes calctime minutes.
     """
-    def __init__(self, env, num_machines, calctime):
+    A datacenter with limited number of rented machines A.K.A The cloud.
+
+    Gateway nodes can request one of the machines (1 default). When they get one
+    the calculation can start. It takes processtime seconds.
+    """
+    def __init__(self, env, num_machines, processtime):
         self.env = env
         self.machine = simpy.PriorityResource(env, num_machines)
-        self.calctime = calctime
+        self.processtime = processtime
 
     def calc(self, val):
-        """The calculation processes. It takes a ``val`` processes and tries
-        to calculate it."""
-        yield self.env.timeout(self.calctime)
+        """
+        The calculation processes. It takes a ``val`` processes and tries
+        to calculate it.
+        """
+        yield self.env.timeout(self.processtime)
 
 class Serverfarm(object):
-    """A server which several iot devices can request data from.
-       However if the calculation is deemed too heavy then the server
-       needs to ask for a fast machine in the data center to do the
-       calculation.
     """
-    def __init__(self, env, num_servers, calctime, datacenter):
+    Our gateway devices, hopefully only one is needed.
+    """
+    def __init__(self, env, num_servers, processtime, datacenter):
         self.env = env
         self.server = simpy.PriorityResource(env, num_servers)
-        self.calctime = calctime
+        self.processtime = processtime
         self.datacenter = datacenter
 
     def proc(self, val):
-        """Processing the data incoming from a IOT device.
+        """
+        Processing the data incoming from a IOT device.
         """
 
         #Roughly 30% of all requests are heavy calculations.
@@ -62,7 +66,7 @@ class Serverfarm(object):
             yield env.process(self.datacenter.calc(val))
         else:
             print("Process light, handle at server.")
-            yield self.env.timeout(self.calctime)
+            yield self.env.timeout(self.processtime)
 
 
 def device(env, name, serverfarm):
@@ -84,16 +88,16 @@ def device(env, name, serverfarm):
         wt = getsprocessed - starttime
         pt = getsanswered - getsprocessed
         tt = getsanswered - starttime
-        time_data.append({"waitTime": wt, "processTime": pt, "totalTime": tt})
+        time_data.append({"waitTime": wt/1000, "processTime": pt/1000, "totalTime": tt/1000})
 
-def setup(env, num_machines, num_servers, calctime, heavytime, t_inter):
+def setup(env, num_devices, num_machines, num_servers, processtime, computetime, t_inter):
     """Create a datacenter, a number of servers, a number of initial device requests and keep creating cars
     approx. every ``t_inter`` minutes."""
     # Create the datacenter
-    datacenter = Datacenter(env, num_machines, heavytime)
+    datacenter = Datacenter(env, num_machines, computetime)
 
     # Create the serverfarm
-    serverfarm = Serverfarm(env, num_servers, calctime, datacenter)
+    serverfarm = Serverfarm(env, num_servers, processtime, datacenter)
 
     # Create 4 initial iot data requests
     for i in range(4):
@@ -101,7 +105,7 @@ def setup(env, num_machines, num_servers, calctime, heavytime, t_inter):
 
     # Create more iot data requests while the simulation is running
     while True:
-        yield env.timeout(random.randint(t_inter - 2, t_inter + 2))
+        yield env.timeout(t_inter/num_devices)
         i += 1
         env.process(device(env, 'IOT %d' % i, serverfarm))
 
@@ -112,7 +116,7 @@ random.seed(RANDOM_SEED)  # This helps reproducing the results
 
 # Create an environment and start the setup process
 env = simpy.Environment()
-env.process(setup(env, NUM_MACHINES, NUM_SERVERS, CALC_TIME, HEAVY_TIME, HEAVY_INTERVAL))
+env.process(setup(env, NUM_DEVICES, NUM_MACHINES, NUM_SERVERS, PROCESS_TIME, COMPUTE_TIME, SEND_INTERVAL))
 
 # Execute!
 env.run(until=SIM_TIME)
@@ -120,6 +124,6 @@ env.run(until=SIM_TIME)
 
 print([item["totalTime"] for item in time_data])
 
-plt.plot([i["totalTime"] for i in time_data])
-plt.ylabel("Total process time of button press in seconds")
+plt.plot([i["waitTime"] for i in time_data])
+plt.ylabel("Wait time of button press in seconds")
 plt.show()
