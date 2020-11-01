@@ -20,6 +20,8 @@ HEAVY_TIME = 15      # Time it takes for a heavy calculation
 HEAVY_INTERVAL = 30  # How often a heavy calculation will be needed.
 SIM_TIME = 400       # Simulation time in seconds
 
+time_data = []
+
 class Datacenter(object):
     """A datacenter with limited number of rented machines.
 
@@ -68,14 +70,22 @@ def device(env, name, serverfarm):
     It then starts the calculation process and waits for it to finish...
 
     """
+    
+    starttime = env.now
     print('%s sending request at %.2f.' % (name, env.now))
     with serverfarm.server.request() as request:
         yield request
 
+        getsprocessed = env.now
         print('%s gets processed at %.2f.' % (name, env.now))
         yield env.process(serverfarm.proc(name))
 
+        getsanswered = env.now
         print('%s receives answer at %.2f.' % (name, env.now))
+        wt = getsprocessed - starttime
+        pt = getsanswered - getsprocessed
+        tt = getsanswered - starttime
+        time_data.append({"waitTime": wt, "processTime": pt, "totalTime": tt})
 
 def setup(env, num_machines, num_servers, calctime, heavytime, t_inter):
     """Create a datacenter, a number of servers, a number of initial device requests and keep creating cars
