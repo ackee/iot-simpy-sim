@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 RANDOM_SEED = 42        # Not so random but we want it reproducible
 NUM_MACHINES = 1        # Number of calc machines.
-NUM_SERVERS = 1         # Number of gateway nodes that are connected to sensors
+NUM_SERVERS = 2         # Number of gateway nodes that are connected to sensors
 NUM_DEVICES = 10        # Number of edge devices
 PROCESS_TIME = 1000        # Time it takes to calculate 
 COMPUTE_TIME = 1000        # Time it takes for a heavy calculation
