@@ -11,6 +11,8 @@ import random
 
 import simpy
 
+import matplotlib.pyplot as plt
+
 
 RANDOM_SEED = 42     # Not so random but we want it reproducible
 NUM_MACHINES = 1     # Number of calc machines.
@@ -115,5 +117,9 @@ env.process(setup(env, NUM_MACHINES, NUM_SERVERS, CALC_TIME, HEAVY_TIME, HEAVY_I
 # Execute!
 env.run(until=SIM_TIME)
 
-for item in time_data:
-    print(item["totalTime"])
+
+print([item["totalTime"] for item in time_data])
+
+plt.plot([i["totalTime"] for i in time_data])
+plt.ylabel("Total process time of button press in seconds")
+plt.show()
