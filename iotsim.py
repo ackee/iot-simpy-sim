@@ -15,14 +15,14 @@ import matplotlib.pyplot as plt
 
 # All times unless otherwise specified are in seconds
 
-RANDOM_SEED = 42        # Not so random but we want it reproducible
-NUM_MACHINES = 1        # Number of calc machines.
-NUM_SERVERS = 2         # Number of gateway nodes that are connected to sensors
-NUM_DEVICES = 10        # Number of edge devices
+RANDOM_SEED = 42           # Not so random but we want it reproducible
+NUM_MACHINES = 1           # Number of calc machines.
+NUM_SERVERS = 2            # Number of gateway nodes that are connected to sensors
+NUM_DEVICES = 10           # Number of edge devices
 PROCESS_TIME = 1000        # Time it takes to calculate 
 COMPUTE_TIME = 1000        # Time it takes for a heavy calculation
-SEND_INTERVAL = 5000      # How often a edge device will send an image.
-SIM_TIME = 4000000          # Simulation time in seconds
+SEND_INTERVAL = 5000       # How often a edge device will send an image.
+SIM_TIME = 4000000         # Simulation time in seconds
 
 time_data = []          # List of dictionaries to store the data of how long a request takes.
 
@@ -122,7 +122,7 @@ env.process(setup(env, NUM_DEVICES, NUM_MACHINES, NUM_SERVERS, PROCESS_TIME, COM
 env.run(until=SIM_TIME)
 
 
-print([item["totalTime"] for item in time_data])
+print([item["waitTime"] for item in time_data])
 
 plt.plot([i["waitTime"] for i in time_data])
 plt.ylabel("Wait time of button press in seconds")
