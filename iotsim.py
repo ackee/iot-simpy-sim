@@ -108,7 +108,7 @@ def setup(env, num_devices, num_machines, num_servers, processtime, computetime,
     while True:
         yield env.timeout(t_inter/num_devices)
         i+=1
-        env.process(device(env, 'IOT %d' % (i%10), gateway))
+        env.process(device(env, 'IOT %d' % (i%num_devices), gateway))
 
 # Setup and start the simulation
 print('IOT Network simulation')
