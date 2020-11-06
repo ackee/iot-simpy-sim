@@ -13,16 +13,16 @@ import simpy
 
 import matplotlib.pyplot as plt
 
-# All times unless otherwise specified are in seconds
+# All times unless otherwise specified are in half a second
 
-RANDOM_SEED = 42           # Not so random but we want it reproducible
-NUM_MACHINES = 1           # Number of available machines in the cloud.
-NUM_SERVERS = 2            # Number of gateway nodes that are connected to sensors
-NUM_DEVICES = 10           # Number of edge devices
-PROCESS_TIME = 1000        # Time it takes to calculate 
-COMPUTE_TIME = 1000        # Time it takes for a heavy calculation
-SEND_INTERVAL = 5000       # How often a edge device will send an image.
-SIM_TIME = 4000000         # Simulation time in seconds
+RANDOM_SEED = 42                 # Not so random but we want it reproducible
+NUM_MACHINES = 1                 # Number of available machines in the cloud.
+NUM_SERVERS = 2                  # Number of gateway nodes that are connected to sensors
+NUM_DEVICES = 10                 # Number of edge devices
+PROCESS_TIME = 8                 # Time it takes to calculate 
+SEND_TO_CLOUD_TIME = 1000        # Time it takes for a heavy calculation
+SEND_INTERVAL = 20               # How often a edge device will send a bulk of five images.
+SIM_TIME = 4000               # Simulation time in seconds
 
 time_data = []          # List of dictionaries to store the data of how long a request takes.
 
