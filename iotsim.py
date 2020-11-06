@@ -54,18 +54,22 @@ class Gateway(object):
         self.server = simpy.PriorityResource(env, num_servers)
         self.processtime = processtime
         self.cloud = cloud
+        self.reqsUntilSend = 10
 
     def proc(self, val):
         """
         Processing the data incoming from a IOT device.
         """
 
-        #Roughly 30% of all requests are heavy calculations.
-        if random.randint(0,1) < 0.3:
-            print("Process is heavy sending to data center!")
+        #Every 10 requests we also send data to the cloud.
+        if self.reqsUntilSend <= 0:
+            self.reqsUntilSend = 10
+            print("Gateway is sending data to the cloud!")
+            yield self.env.timeout(self.processtime)
             yield env.process(self.cloud.calc(val))
         else:
-            print("Process light, handle at server.")
+            # Every other when we don't send data to the cloud.
+            self.reqsUntilSend = self.reqsUntilSend - 1
             yield self.env.timeout(self.processtime)
 
 
@@ -116,7 +120,7 @@ random.seed(RANDOM_SEED)  # This helps reproducing the results
 
 # Create an environment and start the setup process
 env = simpy.Environment()
-env.process(setup(env, NUM_DEVICES, NUM_MACHINES, NUM_SERVERS, PROCESS_TIME, COMPUTE_TIME, SEND_INTERVAL))
+env.process(setup(env, NUM_DEVICES, NUM_MACHINES, NUM_SERVERS, PROCESS_TIME, SEND_TO_CLOUD_TIME, SEND_INTERVAL))
 
 # Execute!
 env.run(until=SIM_TIME)
