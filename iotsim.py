@@ -65,7 +65,7 @@ class Gateway(object):
         if self.reqsUntilSend <= 0:
             self.reqsUntilSend = 10
             print("Gateway is sending data to the cloud!")
-            yield self.env.timeout(self.processtime)
+            yield self.env.timeout(random.randint(self.processtime-2, self.processtime+1))
             yield env.process(self.cloud.calc(val))
         else:
             # Every other when we don't send data to the cloud.
