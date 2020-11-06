@@ -17,12 +17,12 @@ import matplotlib.pyplot as plt
 
 RANDOM_SEED = 42                 # Not so random but we want it reproducible
 NUM_MACHINES = 1                 # Number of available machines in the cloud.
-NUM_SERVERS = 2                  # Number of gateway nodes that are connected to sensors
+NUM_CORES = 4                    # Number of cpu cores on the raspberry pi.
 NUM_DEVICES = 10                 # Number of edge devices
 PROCESS_TIME = 8                 # Time it takes to calculate 
-SEND_TO_CLOUD_TIME = 1        # Time it takes for a heavy calculation
+SEND_TO_CLOUD_TIME = 1           # Time it takes for a heavy calculation
 SEND_INTERVAL = 20               # How often a edge device will send a bulk of five images.
-SIM_TIME = 4000               # Simulation time in seconds
+SIM_TIME = 4000                  # Simulation time in seconds
 
 time_data = []          # List of dictionaries to store the data of how long a request takes.
 
@@ -94,14 +94,14 @@ def device(env, name, gateway):
         tt = getsanswered - starttime
         time_data.append({"waitTime": wt*2, "processTime": pt*2, "totalTime": tt*2})
 
-def setup(env, num_devices, num_machines, num_servers, processtime, computetime, t_inter):
+def setup(env, num_devices, num_machines, num_cores, processtime, computetime, t_inter):
     """Create a cloud, a number of servers, a number of initial device requests and keep creating cars
     approx. every ``t_inter`` minutes."""
     # Create the Cloud object
     cloud = Cloud(env, num_machines, computetime)
 
     # Create the Gateway system
-    gateway = Gateway(env, num_servers, processtime, cloud)
+    gateway = Gateway(env, num_cores, processtime, cloud)
 
     i=0
     # Create more iot data requests while the simulation is running
@@ -117,7 +117,7 @@ random.seed(RANDOM_SEED)  # This helps reproducing the results
 
 # Create an environment and start the setup process
 env = simpy.Environment()
-env.process(setup(env, NUM_DEVICES, NUM_MACHINES, NUM_SERVERS, PROCESS_TIME, SEND_TO_CLOUD_TIME, SEND_INTERVAL))
+env.process(setup(env, NUM_DEVICES, NUM_MACHINES, NUM_CORES, PROCESS_TIME, SEND_TO_CLOUD_TIME, SEND_INTERVAL))
 
 # Execute!
 env.run(until=SIM_TIME)
