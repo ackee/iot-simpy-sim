@@ -92,7 +92,7 @@ def device(env, name, gateway):
         wt = getsprocessed - starttime
         pt = getsanswered - getsprocessed
         tt = getsanswered - starttime
-        time_data.append({"waitTime": wt/1000, "processTime": pt/1000, "totalTime": tt/1000})
+        time_data.append({"waitTime": wt*2, "processTime": pt*2, "totalTime": tt*2})
 
 def setup(env, num_devices, num_machines, num_servers, processtime, computetime, t_inter):
     """Create a cloud, a number of servers, a number of initial device requests and keep creating cars
@@ -103,15 +103,12 @@ def setup(env, num_devices, num_machines, num_servers, processtime, computetime,
     # Create the Gateway system
     gateway = Gateway(env, num_servers, processtime, cloud)
 
-    # Create 4 initial iot data requests
-    for i in range(4):
-        env.process(device(env, 'IOT %d' % i, gateway))
-
+    i=0
     # Create more iot data requests while the simulation is running
     while True:
         yield env.timeout(t_inter/num_devices)
-        i += 1
-        env.process(device(env, 'IOT %d' % i, gateway))
+        i+=1
+        env.process(device(env, 'IOT %d' % (i%10), gateway))
 
 # Setup and start the simulation
 print('IOT Network simulation')
