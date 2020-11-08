@@ -64,17 +64,25 @@
     emotional recognition, for privacy reasons. For the time data we used this[3] article as
     source, they also used a RaspberryPI to first do some machine training and then did a test
     to see the performance of the recognition which was about 1.21 fps or about 825 ms per
-    picture to do a facial recognition. As for the simulation itself it is build with a 
+    picture to do a facial recognition. As for the simulation itself it is built with a 
     simpy resource with one resource per thread, which is four on the Raspberry PI. The
     cloud is also built as a single resource which the gateway calls every ten data points
-    which it received and calculated. The 
+    which it received and calculated. The incoming data from the edge nodes are sent at the
+    interval time of ten seconds divided by number of devices, as the devices send their data
+    of five pictures every ten seconds which is a picture taking every 2 seconds on the edge
+    device. The simulation did not account for the times it took the LoRa network as used in[1]
+    to send the data. The calculation time in the simulation is a simpy even sleep which sleeps
+    for an amount of discrete steps. At the end of the simulation the total time it takes for
+    a batch of pictures to be sent, waiting for it to be processed and the time to process
+    the data is plotted on a graph. The source code can be viewed online on[4] or read at
+    as an appendix at the end of this article.
   
   \section{Results}
     The results show that the sweet spot in this configuration seems to be nine edge nodes
     connected to a single gateway node. With ten edge nodes the gateway is not able to keep
-    up with the incoming data. And with eigth edge nodes the gateway is running without any
-    waiting time. With nine nodes the gatway node is showing some times when it is not able
-    to keep up but gets it down to a reasonable level fast.
+    up with the incoming data as can be seen in Figure 1. And with eigth edge nodes the gateway is running without any
+    waiting time which shows in Figure 2. With nine nodes the gatway node is showing some times when it is not able
+    to keep up but gets it down to a reasonable level fast which is contained in Figure 3. 
     
   \section{Discussion}
     Subjective interpretation of the results, describe what you think the show.
