@@ -80,19 +80,23 @@
   \section{Results}
     The results show that the sweet spot in this configuration seems to be nine edge nodes
     connected to a single gateway node. With ten edge nodes the gateway is not able to keep
-    up with the incoming data as can be seen in Figure 1. And with eigth edge nodes the gateway is running without any
-    waiting time which shows in Figure 2. With nine nodes the gatway node is showing some times when it is not able
-    to keep up but gets it down to a reasonable level fast which is contained in Figure 3. 
+    up with the incoming data as can be seen in Figure 1. And with eigth edge nodes the gateway is
+    running without any waiting time which shows in Figure 2. With nine nodes the gatway node is
+    showing some times when it is not able to keep up but gets it down to a lower level also
+    instead of the waiting times getting higher all the time which is contained in Figure 3. 
     
   \section{Discussion}
-    Subjective interpretation of the results, describe what you think the show.
-    "What does it mean?"
+    When at ten devices the processing time will be so long that the data which the gate receives
+    will just build up and the time it takes for each batch of pictures will we longer each time.
+    With this simulation basing the processing power of a Raspberry PI 3 there exists at the time
+    of writing this article the successor Raspberry PI for with more computing power which
+    might be one solution to be able to handle more edge nodes. The other might be to have lower
+    resolution camera but that might impact how good the recognition software can identify
+    the threat it is looking for.
     
   \section{Conclusion}
-    In the Conclusion section, state the most important outcome of your work. Do not simply
-    summarize the points already made in the body — instead, interpret your findings at a
-    higher level of abstraction. Show whether, or to what extent, you have succeeded in
-    addressing the need stated in the Introduction.
+    Through this simulation we found out that a gateway node consisting of a Raspberry PI can
+    handle about nine edge devices in this constellation. With 
     
   \section{References}
     
