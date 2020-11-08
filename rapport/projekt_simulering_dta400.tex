@@ -61,7 +61,13 @@
     with a camera sensor attached for taking pictures. The Raspberry is also connected to a
     cloud server used to store the results data together with GPS coordinates of that data.
     Note that the images themselves are not stored only the results of the image and
-    emotional recognition, for privacy reasons.
+    emotional recognition, for privacy reasons. For the time data we used this[3] article as
+    source, they also used a RaspberryPI to first do some machine training and then did a test
+    to see the performance of the recognition which was about 1.21 fps or about 825 ms per
+    picture to do a facial recognition. As for the simulation itself it is build with a 
+    simpy resource with one resource per thread, which is four on the Raspberry PI. The
+    cloud is also built as a single resource which the gateway calls every ten data points
+    which it received and calculated. The 
   
   \section{Results}
     The results show that the sweet spot in this configuration seems to be nine edge nodes
