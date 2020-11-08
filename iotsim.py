@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 RANDOM_SEED = 42                 # Not so random but we want it reproducible
 NUM_MACHINES = 1                 # Number of available machines in the cloud.
 NUM_CORES = 4                    # Number of cpu cores on the raspberry pi.
-NUM_DEVICES = 10                 # Number of edge devices
+NUM_DEVICES = 9                 # Number of edge devices
 PROCESS_TIME = 8                 # Time it takes to calculate 
 SEND_TO_CLOUD_TIME = 1           # Time it takes for a heavy calculation
 SEND_INTERVAL = 20               # How often a edge device will send a bulk of five images.
