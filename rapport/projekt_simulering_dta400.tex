@@ -3,40 +3,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{graphicx}
+\usepackage{cite}
 
 \title{Performance of a gateway node in an emotional recognition system for saftey alerts.}
-\author{Alexander Norberg}
-% \newcommand\cTITLE{Performance of a gateway node in an emotional recognition system for saftey alerts.}
-% \newcommand\cAUTHOR{Alexander Norberg}
-% \newcommand\cEMAIL{alexander.norberg@student.hv.se}
-% \newcommand\cDEPARTMENT{Department of Engineering Science}
-% \newcommand\cSCHOOL{University West}
+\author{Alexander Norberg <alexander.norberg@student.hv.se>}
 
 \begin{document}
 
-%   \begin{titlepage}
-%     \begin{flushleft}
-%       \includegraphics[scale=0.3]{universitywest_svenska.eps}
-%     \end{flushleft}
-%     \begin{center}
-%       \vspace*{5cm}
-%       \Huge
-%       \textbf{\cTITLE}\\
-%       \vspace{3cm}
-%       \Large
-%       \textbf{\cAUTHOR}\\
-%       \large
-%       \textbf{\cEMAIL}
-%       \vfill
-%       \vspace{0.8cm}
-%     \end{center}
-%     \begin{flushright}
-%       \cDEPARTMENT\\
-%       \cSCHOOL\\
-%       \today\\
-%     \end{flushright}
-%   \end{titlepage}
-%
   \maketitle
   \begin{abstract}
     I have together with my group partner Artin Nadjati simulated the performance of a
@@ -74,8 +47,8 @@
     to send the data. The calculation time in the simulation is a simpy even sleep which sleeps
     for an amount of discrete steps. At the end of the simulation the total time it takes for
     a batch of pictures to be sent, waiting for it to be processed and the time to process
-    the data is plotted on a graph. The source code can be viewed online on[4] or read at
-    as an appendix at the end of this article.
+    the data is plotted on a graph. For plotting data the library matplotlib is used. 
+    The source code can be viewed online on[4] or read at as an appendix at the end of this article.
   
   \section{Results}
     The results show that the sweet spot in this configuration seems to be nine edge nodes
@@ -99,7 +72,8 @@
     handle about nine edge devices in this constellation. With 
     
   \section{References}
-    
+    \bibliographystyle{IEEEtran}
+    \bibliography{main}
 
   \onecolumn
   \section{Appendix - source code.}
