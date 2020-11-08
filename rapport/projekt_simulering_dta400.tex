@@ -1,0 +1,89 @@
+\documentclass[a4paper,11pt,notitlepage]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+
+\title{Performance of a gateway node in an emotional recognition system for saftey alerts.}
+\author{Alexander Norberg}
+% \newcommand\cTITLE{Performance of a gateway node in an emotional recognition system for saftey alerts.}
+% \newcommand\cAUTHOR{Alexander Norberg}
+% \newcommand\cEMAIL{alexander.norberg@student.hv.se}
+% \newcommand\cDEPARTMENT{Department of Engineering Science}
+% \newcommand\cSCHOOL{University West}
+
+\begin{document}
+
+%   \begin{titlepage}
+%     \begin{flushleft}
+%       \includegraphics[scale=0.3]{universitywest_svenska.eps}
+%     \end{flushleft}
+%     \begin{center}
+%       \vspace*{5cm}
+%       \Huge
+%       \textbf{\cTITLE}\\
+%       \vspace{3cm}
+%       \Large
+%       \textbf{\cAUTHOR}\\
+%       \large
+%       \textbf{\cEMAIL}
+%       \vfill
+%       \vspace{0.8cm}
+%     \end{center}
+%     \begin{flushright}
+%       \cDEPARTMENT\\
+%       \cSCHOOL\\
+%       \today\\
+%     \end{flushright}
+%   \end{titlepage}
+%
+  \maketitle
+  \twocolumn
+  \begin{abstract}
+    I have together with my group partner Artin Nadjati simulated the performance of a
+    gateway node in a fog network which is supposed to handle emotional recognition on
+    images sent from edge nodes which contain an observed object or place and be able to
+    deduct if a crime has happened or if someone is in need of medical attention. The
+    gateway node also sends the information together with GPS-coordinates of the edge
+    node to a cloud server for history keeping and statistical analysis.
+  \end{abstract}
+  
+  \section{Introduction}
+    With the rise in machine learning and techniques to be able to recognize faces in
+    software the idea of automatically detect when the law enforcement, emergency medical
+    service or the fire department is needed and send an alert is getting more possible.
+    We have decided to simulate a system similar to the system used by Bhattacherjee, Kumar
+    and Rajalakshmi in[1] but have it as an automated system instead of needing a button
+    press.
+  \section{Methods}
+    To make this simulation we use simpy[2] which is a library written in python for use in
+    in python to simulate discrete events. We also decided to use the system resources used
+    in the article[1] which was a Raspberry PI 3 B+ model connected to an Arduino Pro Mini
+    with a camera sensor attached for taking pictures. The Raspberry is also connected to a
+    cloud server used to store the results data together with GPS coordinates of that data.
+    Note that the images themselves are not stored only the results of the image and
+    emotional recognition, for privacy reasons.
+  
+  \section{Results}
+    The results show that the sweet spot in this configuration seems to be nine edge nodes
+    connected to a single gateway node. With ten edge nodes the gateway is not able to keep
+    up with the incoming data. And with eigth edge nodes the gateway is running without any
+    waiting time. With nine nodes the gatway node is showing some times when it is not able
+    to keep up but gets it down to a reasonable level fast.
+    
+  \section{Discussion}
+    Subjective interpretation of the results, describe what you think the show.
+    "What does it mean?"
+    
+  \section{Conclusion}
+    In the Conclusion section, state the most important outcome of your work. Do not simply
+    summarize the points already made in the body — instead, interpret your findings at a
+    higher level of abstraction. Show whether, or to what extent, you have succeeded in
+    addressing the need stated in the Introduction.
+    
+  \section{References}
+    
+
+  \onecolumn
+  \section{Appendix - source code.}
+\end{document}
